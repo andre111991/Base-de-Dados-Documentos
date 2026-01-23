@@ -1,0 +1,53 @@
+
+// Utilizadores 
+
+{
+    "_id": "65af...123",
+    "nome": "João Silva",
+    "email": "joao@email.com",
+    "tipo_utilizador": "cliente",
+    "veiculos": [
+      {
+        "matricula": "AA-00-BB",
+        "combustivel": "Gasolina"
+      },
+      {
+        "matricula": "EV-11-CC",
+        "combustivel": "Elétrico"
+      }
+    ]
+  }
+
+  //Reservas e Pagamentos
+
+  {
+    "_id": "99bb...456",
+    "utilizador_id": "65af...123",
+    "vaga": {
+      "numero": 15,
+      "andar": 0,
+      "tipo": "VE"
+    },
+    "periodo": {
+      "inicio": "2025-05-20T10:00:00Z",
+      "fim": "2025-05-20T12:30:00Z"
+    },
+    "pagamento": {
+      "valor": 5.00,
+      "metodo": "MB WAY",
+      "status": "pago"
+    }
+  }
+
+//Monitorização dos Sensores
+
+{
+    "timestamp": "2025-05-20T14:00:05Z",
+    "tipo_dispositivo": "sensor_vaga",
+    "vaga_id": 15,
+    "leitura": "ocupado",
+    "dados_adicionais": {
+      "intensidade_luz": "baixa",
+      "bateria_sensor": "85%"
+    }
+  }
