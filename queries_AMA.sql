@@ -10,7 +10,6 @@ FROM Vaga
 GROUP BY estado;
 
 --identificação carro eletrico ou combustao 
-
 SELECT 
     id_veiculo,
     matricula,
@@ -33,6 +32,7 @@ GROUP BY id_veiculo;
 
 -- Calcular a taxa de ocupação total (em percentagem)
 SELECT 
+    // conta os 1s e divide pelo total
     (COUNT(CASE WHEN estado = 'ocupada' THEN 1 END) * 100.0 / COUNT(*)) AS taxa_ocupacao_percent
 FROM Vaga;
 
@@ -40,6 +40,7 @@ FROM Vaga;
 SELECT 
     COUNT(*) AS total_vagas,
     SUM(CASE WHEN estado = 'livre' THEN 1 ELSE 0 END) AS vagas_livres,
+    // soma os 1s
     ROUND((SUM(CASE WHEN estado = 'livre' THEN 1 ELSE 0 END) * 100.0) / COUNT(*), 2) AS taxa_desocupacao_percent
 FROM Vaga;
 
@@ -90,5 +91,5 @@ WHERE r.id_utilizador = 1 AND r.data_hora_fim IS NULL;
 -- Total de energia gerada pelos painéis nos últimos 7 dias
 SELECT SUM(potencia_gerada) as total_energia_gerada
 FROM PainelSolar
-WHERE data_registo >= DATE_SUB(CURDATE(), INTERVAL 7 DAY); //substraçao  de datas, pega na data atual e subtrai 7 dias
-                                                        // da os dados apartir de 7 dias atras apartir de hoje
+WHERE data_registo >= DATE_SUB(CURDATE(), INTERVAL 7 DAY); //substraçao  de datas, pega na data atual e subtrai 7s dias
+                                                        // da os dados apartir de 7s dias atras apartir de hoje
