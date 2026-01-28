@@ -24,6 +24,14 @@ SELECT
     (COUNT(CASE WHEN estado = 'ocupada' THEN 1 END) * 100.0 / COUNT(*)) AS taxa_ocupacao_percent
 FROM Vaga;
 
+-- Taxa de desocupação total (em percentagem)
+
+SELECT 
+    COUNT(*) AS total_vagas,
+    SUM(CASE WHEN estado = 'livre' THEN 1 ELSE 0 END) AS vagas_livres,
+    ROUND((SUM(CASE WHEN estado = 'livre' THEN 1 ELSE 0 END) * 100.0) / COUNT(*), 2) AS taxa_desocupacao_percent
+FROM Vaga;
+
 -- Valor total faturado por método de pagamento
 SELECT metodo_pagamento, SUM(valor) as total_recebido
 FROM Pagamento
