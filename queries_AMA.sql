@@ -9,6 +9,18 @@ SELECT estado, COUNT(*) as total
 FROM Vaga
 GROUP BY estado;
 
+--identificação carro eletrico ou combustao 
+
+SELECT 
+    id_veiculo,
+    matricula,
+    combustível,
+    CASE 
+        WHEN combustível IN ('Elétrico', 'Híbrido Plug-in', 'VE') THEN 'Elétrico'
+        ELSE 'Combustão/Normal'
+    END AS categoria_veiculo
+FROM Veiculo;
+
 -- Encontrar vagas de carregamento (VE) que estão atualmente livres
 SELECT id_vaga, andar 
 FROM Vaga 
@@ -25,7 +37,6 @@ SELECT
 FROM Vaga;
 
 -- Taxa de desocupação total (em percentagem)
-
 SELECT 
     COUNT(*) AS total_vagas,
     SUM(CASE WHEN estado = 'livre' THEN 1 ELSE 0 END) AS vagas_livres,
@@ -79,4 +90,5 @@ WHERE r.id_utilizador = 1 AND r.data_hora_fim IS NULL;
 -- Total de energia gerada pelos painéis nos últimos 7 dias
 SELECT SUM(potencia_gerada) as total_energia_gerada
 FROM PainelSolar
-WHERE data_registo >= DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+WHERE data_registo >= DATE_SUB(CURDATE(), INTERVAL 7 DAY); //substraçao  de datas, pega na data atual e subtrai 7 dias
+                                                        // da os dados apartir de 7 dias atras apartir de hoje
