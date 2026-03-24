@@ -1,78 +1,67 @@
--- 1. Criar a base de dados
-CREATE DATABASE IF NOT EXISTS sistema_parqueamento;
-USE sistema_parqueamento;
+CREATE DATABASE IF NOT EXISTS sistema_estacionamento;
+USE sistema_estacionamento;
 
--- 2. Tabela Utilizador
+-- 1. Tabela Utilizador
 CREATE TABLE Utilizador (
     id_utilizador INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     tipo_utilizador VARCHAR(50)
+);
+
+-- 2. Tabela Veiculo
+CREATE TABLE Veiculo (
+    id_veiculo INT AUTO_INCREMENT PRIMARY KEY,
+    id_utilizador INT NOT NULL,
+    matricula VARCHAR(20) NOT NULL,
+    tipo_combustivel VARCHAR(30),
+    CONSTRAINT fk_veiculo_utilizador FOREIGN KEY (id_utilizador) 
+        REFERENCES Utilizador(id_utilizador) ON DELETE CASCADE
 );
 
 -- 3. Tabela Vaga
 CREATE TABLE Vaga (
     id_vaga INT AUTO_INCREMENT PRIMARY KEY,
     andar INT NOT NULL,
-    tipo VARCHAR(20), -- normal/VE
-    estado VARCHAR(20) -- livre/ocupada/reservada
+    cor VARCHAR(45),
+    letra VARCHAR(45),
+    tipo VARCHAR(45),
+    estado TINYINT(1) DEFAULT 0
 );
 
--- 4. Tabela Veiculo (Relacionada com Utilizador)
-CREATE TABLE Veiculo (
-    id_veiculo INT AUTO_INCREMENT PRIMARY KEY,
-    id_utilizador INT,
-    matricula VARCHAR(20) UNIQUE NOT NULL,
-    combustivel VARCHAR(30),
-    FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador) ON DELETE SET NULL
-);
-
--- 5. Tabela Reserva (Relacionada com Utilizador e Vaga)
+-- 4. Tabela Reserva
 CREATE TABLE Reserva (
     id_reserva INT AUTO_INCREMENT PRIMARY KEY,
-    id_utilizador INT,
-    id_vaga INT,
+    id_utilizador INT NOT NULL,
+    id_veiculo INT NOT NULL,
+    id_vaga INT NOT NULL,
     data_hora_inicio DATETIME NOT NULL,
     data_hora_fim DATETIME,
-    FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador),
-    FOREIGN KEY (id_vaga) REFERENCES Vaga(id_vaga)
+    data_pagamento DATETIME,
+    valor FLOAT,
+    CONSTRAINT fk_reserva_utilizador FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador),
+    CONSTRAINT fk_reserva_veiculo FOREIGN KEY (id_veiculo) REFERENCES Veiculo(id_veiculo),
+    CONSTRAINT fk_reserva_vaga FOREIGN KEY (id_vaga) REFERENCES Vaga(id_vaga)
 );
 
--- 6. Tabela Carregamento (Relacionada com Veiculo e Vaga)
+-- 5. Tabela Carregamento
 CREATE TABLE Carregamento (
     id_carregamento INT AUTO_INCREMENT PRIMARY KEY,
-    id_veiculo INT,
-    id_vaga INT,
-    tempo_carregamento TIME,
-    energia_consumida DECIMAL(10,2),
-    FOREIGN KEY (id_veiculo) REFERENCES Veiculo(id_veiculo),
-    FOREIGN KEY (id_vaga) REFERENCES Vaga(id_vaga)
+    id_veiculo INT NOT NULL,
+    id_vaga INT NOT NULL,
+    data_hora_inicio DATETIME NOT NULL,
+    data_hora_fim DATETIME,
+    pago TINYINT(1) DEFAULT 0,
+    CONSTRAINT fk_carregamento_veiculo FOREIGN KEY (id_veiculo) REFERENCES Veiculo(id_veiculo),
+    CONSTRAINT fk_carregamento_vaga FOREIGN KEY (id_vaga) REFERENCES Vaga(id_vaga)
 );
 
--- 7. Tabela Pagamento (Relacionada com Reserva)
-CREATE TABLE Pagamento (
-    id_pagamento INT AUTO_INCREMENT PRIMARY KEY,
-    id_reserva INT,
-    valor DECIMAL(10,2) NOT NULL,
-    metodo_pagamento VARCHAR(50),
-    data_pagamento DATETIME,
-    FOREIGN KEY (id_reserva) REFERENCES Reserva(id_reserva)
-);
-
--- 8. Tabela Sensor (Relacionada com Vaga)
-CREATE TABLE Sensor (
-    id_sensor INT AUTO_INCREMENT PRIMARY KEY,
-    id_vaga INT,
-    tipo_sensor VARCHAR(50), -- ocupação/luz
-    estado_sensor VARCHAR(50),
-    FOREIGN KEY (id_vaga) REFERENCES Vaga(id_vaga)
-);
-
--- 9. Tabela PainelSolar
-CREATE TABLE PainelSolar (
-    id_painel INT AUTO_INCREMENT PRIMARY KEY,
-    potencia_gerada DECIMAL(10,2),
-    eficiencia DECIMAL(5,2),
-    data_registo DATE
+-- 6. Tabela Carregador
+CREATE TABLE Carregador (
+    id_carregador INT AUTO_INCREMENT PRIMARY KEY,
+    id_carregamento INT NOT NULL,
+    potencia FLOAT,
+    CONSTRAINT fk_carregador_carregamento FOREIGN KEY (id_carregamento) 
+        REFERENCES Carregamento(id_carregamento) ON DELETE CASCADE
 );
