@@ -1,8 +1,9 @@
+-- Criação do esquema
 CREATE DATABASE IF NOT EXISTS sistema_estacionamento;
 USE sistema_estacionamento;
 
--- 1. Tabela Utilizador (Base para quase tudo)
-CREATE TABLE Utilizador (
+-- 1. Tabela Utilizador (Base do sistema)
+CREATE TABLE IF NOT EXISTS Utilizador (
     id_utilizador INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -10,8 +11,8 @@ CREATE TABLE Utilizador (
     tipo_utilizador VARCHAR(50)
 );
 
--- 2. Tabela Vaga (Independente)
-CREATE TABLE Vaga (
+-- 2. Tabela Vaga (Entidade independente)
+CREATE TABLE IF NOT EXISTS Vaga (
     id_vaga INT AUTO_INCREMENT PRIMARY KEY,
     andar INT NOT NULL,
     cor VARCHAR(45),
@@ -21,7 +22,7 @@ CREATE TABLE Vaga (
 );
 
 -- 3. Tabela Veiculo (Depende do Utilizador)
-CREATE TABLE Veiculo (
+CREATE TABLE IF NOT EXISTS Veiculo (
     id_veiculo INT AUTO_INCREMENT PRIMARY KEY,
     id_utilizador INT NOT NULL,
     matricula VARCHAR(20) NOT NULL,
@@ -31,7 +32,7 @@ CREATE TABLE Veiculo (
 );
 
 -- 4. Tabela Reserva (Depende de Utilizador, Veiculo e Vaga)
-CREATE TABLE Reserva (
+CREATE TABLE IF NOT EXISTS Reserva (
     id_reserva INT AUTO_INCREMENT PRIMARY KEY,
     id_utilizador INT NOT NULL,
     id_veiculo INT NOT NULL,
@@ -46,7 +47,7 @@ CREATE TABLE Reserva (
 );
 
 -- 5. Tabela Carregamento (Depende de Veiculo e Vaga)
-CREATE TABLE Carregamento (
+CREATE TABLE IF NOT EXISTS Carregamento (
     id_carregamento INT AUTO_INCREMENT PRIMARY KEY,
     id_veiculo INT NOT NULL,
     id_vaga INT NOT NULL,
@@ -58,7 +59,7 @@ CREATE TABLE Carregamento (
 );
 
 -- 6. Tabela Carregador (Depende de Carregamento)
-CREATE TABLE Carregador (
+CREATE TABLE IF NOT EXISTS Carregador (
     id_carregador INT AUTO_INCREMENT PRIMARY KEY,
     id_carregamento INT NOT NULL,
     potencia FLOAT,
